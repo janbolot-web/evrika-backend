@@ -2,9 +2,9 @@ import { Schema, model } from "mongoose";
 
 const LessonSchema = new Schema(
   {
-    name: { type: String, required: true },
-    videoUrl: { type: String, required: true },
-    description: { type: String, required: true },
+    name: { type: String },
+    videoUrl: { type: String },
+    description: { type: String },
   },
   {
     timestamps: true,

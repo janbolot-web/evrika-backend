@@ -83,7 +83,7 @@ export const login = async (req, res) => {
 
     res.json({
       data: { ...UserData, token },
-      message:"Вы успешно авторизовались"
+      message: "Вы успешно авторизовались",
     });
   } catch (e) {
     console.log(e);
@@ -96,7 +96,7 @@ export const login = async (req, res) => {
 export const getMe = async (req, res) => {
   try {
     // console.log(req.userId);
-    const user = await userModel.findById(req.userId);
+    const user = await userModel.findById(req.userId).populate("courses");
     if (!user) {
       return res.status(404).json({ message: "Пользователь не найден" });
     }
@@ -108,6 +108,38 @@ export const getMe = async (req, res) => {
     res.status(500).json({
       message: "Нет доступа",
     });
+  }
+};
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await userModel.find();
+
+    res.json(users);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userModel.findById(id).populate("courses");
+
+    res.json(user);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await userModel.findByIdAndDelete({ _id: id });
+    res.json({ message: "Пользователь успешно удален" });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Не удалось удалить пользователья" });
   }
 };
 

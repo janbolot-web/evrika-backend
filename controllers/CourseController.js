@@ -1,7 +1,11 @@
-import { CourseDto } from "../dtos/course.dto.js";
+import e from "express";
+import UserCourseDto, { CourseDto } from "../dtos/course.dto.js";
 import authorModel from "../models/author-model.js";
 import courseModel from "../models/course-model.js";
 import lessonModel from "../models/lesson-model.js";
+import moduleModel from "../models/module-model.js";
+import userModel from "../models/user-model.js";
+import userCoursesModel from "../models/userCourses-model.js";
 
 export const createCourse = async (req, res) => {
   try {
@@ -15,11 +19,10 @@ export const createCourse = async (req, res) => {
       authorName,
       authorProfession,
       authors,
-      lessons,
+      modules,
     } = req.body;
     const authorsData = await authorModel.create(authors);
-    const lessonsData = await lessonModel.create(lessons);
-
+    // const lessonsData = await moduleModel.create();
     const doc = new courseModel({
       title,
       duration,
@@ -30,11 +33,11 @@ export const createCourse = async (req, res) => {
       authorName,
       authorProfession,
       authors: authorsData,
-      lessons: lessonsData,
+      modules: modules,
     });
-
-    let course = await doc.save();
-    course = course._doc;
+    await doc.save();
+    // course = course._doc;
+    // console.log(modules);
     res.json({ message: "Новый курс успешно создан" });
   } catch (error) {
     console.log(error);
@@ -59,7 +62,8 @@ export const getCourse = async (req, res) => {
     const course = await courseModel
       .findById(courseId)
       .populate("authors")
-      .populate("lessons");
+      .populate("modules");
+    // .populate({ path: "modules.lessons" });
     // const { ...courseData } = course._doc;
     res.json(course);
   } catch (error) {
@@ -71,9 +75,25 @@ export const getCourse = async (req, res) => {
 export const getLessons = async (req, res) => {
   try {
     const courseId = req.params.id;
-    const course = await courseModel.findById(courseId).populate("lessons");
-    const { lessons, title } = course._doc;
-    res.json({ title, lessons });
+    const userId = req.query.userId;
+    // const course = await courseModel.findById(courseId).populate("modules");
+    // const { lessons, title } = course._doc;
+    // res.json({ title, lessons });
+    console.log(userId);
+    const user = await userModel.findById(userId);
+    const course = await courseModel.findById(courseId);
+    course.modules.forEach((item) => {
+      return user.courses.forEach((el) => {
+        if (String(item._id) === String(el._id)) {
+          item.isAccess = true;
+        }
+        console.log("NO" + item._id);
+      });
+    });
+
+    await course.save();
+
+    res.json(course);
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Не удалось получить видео" });
@@ -83,11 +103,36 @@ export const getLessons = async (req, res) => {
 export const getLesson = async (req, res) => {
   try {
     const courseId = req.params.id;
-    const course = await lessonModel.findById(courseId);
-    res.json(course);
+    const lessonId = req.query.idLesson;
+    // console.log(lessonId);
+    const course = await courseModel.findById(courseId);
+    // const lessonData = course[0].modules;
+    // let isLesson = [];
+    course.modules.forEach(function (item, i, arr) {
+      item.lessons.forEach(function (item, i, arr) {
+        // isLesson.push(String(item._id));
+        if (String(item._id) === lessonId) {
+          res.json(item);
+        }
+      });
+    });
+    // isLesson = isLesson.filter(function (number) {
+    //   return number === lessonId;
+    // });
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Не удалось получить видео" });
+  }
+};
+
+export const getModules = async (req, res) => {
+  try {
+    const courseId = req.params.id;
+    const { modules } = await courseModel.findById(courseId);
+    res.json(modules);
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Не удалось получить модуль" });
   }
 };
 
@@ -100,6 +145,60 @@ export const deleteCourse = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Не удалось удалить курс" });
+  }
+};
+
+export const createModule = async (req, res) => {
+  try {
+    // const lessonsData = await lessonModel.create(module.lessons);
+    // const modulesData = await moduleModel.create({
+    //   name: module.name,
+    //   lessons: lessonsData,
+    // });
+    // const modulesDoc = await moduleModel.findById()
+    const params = req.body;
+    const courseId = req.params.id;
+    const modulesDoc = await courseModel.findById(courseId);
+    const course = await courseModel.findByIdAndUpdate(courseId, {
+      modules: [...modulesDoc.modules, params.module],
+    });
+    res.json(course);
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Не удалось создать модуль" });
+  }
+};
+
+export const addCourseToUser = async (req, res) => {
+  try {
+    const { moduleId, userId, courseId } = req.body.params;
+
+    let userData = await userModel.findById(userId);
+    let courseData = await courseModel.findById(courseId);
+    let module = courseData.modules.filter(
+      (item) => String(item._id) === moduleId
+    );
+    module[0].courseId = courseId
+    if (module.length > 0) {
+      const candidate = userData.courses.filter(
+        (item) => String(item._id) === moduleId
+      );
+      if (candidate.length > 0) {
+        return res
+          .status(400)
+          .json({ message: "У пользователя уже имеется данный курс!" });
+      }
+      const a = await userModel.findByIdAndUpdate(userId, {
+        courses: [...userData.courses, module[0]],
+      });
+      return res.json(module);
+    }
+
+    // res.json(courseData);
+    res.json({ message: "Что то пошло не так" });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Не удалось создать модуль" });
   }
 };
 

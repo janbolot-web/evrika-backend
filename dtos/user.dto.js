@@ -3,6 +3,7 @@ export default class UserDto {
   id;
   name;
   roles;
+  courses;
   createdAt;
   updatedAt;
   constructor(model) {
@@ -10,6 +11,7 @@ export default class UserDto {
     this.id = model._id;
     this.name = model.name;
     this.roles = model.roles;
+    this.courses = model.courses;
     this.createdAt = model.createdAt;
     this.updatedAt = model.updatedAt;
   }

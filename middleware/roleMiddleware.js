@@ -5,13 +5,15 @@ export default function (roles) {
     if (req.method === "OPTIONS") {
       next();
     }
-    console.log(req.headers.authorization);
     try {
-      const token = req.headers.authorization;
+      const token =
+        req.headers.authorization && req.headers.authorization;
+      console.log('token '+token);
       if (!token) {
         return res.status(403).json({ message: "Пользователь не авторизован" });
       }
       const { roles: userRoles } = jwt.verify(token, "secret1234");
+      console.log();
       let hasRole = false;
       userRoles.forEach((role) => {
         if (roles.includes(role)) {

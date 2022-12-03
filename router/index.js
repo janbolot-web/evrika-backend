@@ -9,6 +9,13 @@ const router = new Router();
 router.post("/auth/register", UserController.register);
 router.post("/auth/login", UserController.login);
 router.get("/auth/me", checkAuth, UserController.getMe);
+router.get("/getUsers", roleMiddleware(["ADMIN"]), UserController.getUsers);
+router.get("/getUserById/:id", UserController.getUserById);
+router.delete(
+  "/removeUser/:id",
+  roleMiddleware(["ADMIN"]),
+  UserController.deleteUser
+);
 
 router.post(
   "/createCourse",
@@ -19,6 +26,9 @@ router.get("/getAllCourses", CourseController.getAllCourses);
 router.get("/getCourse/:id", CourseController.getCourse);
 router.get("/getLessons/:id", CourseController.getLessons);
 router.get("/getLesson/:id", CourseController.getLesson);
-router.delete("/deleteCourse/:id", CourseController.deleteCourse);
+router.get("/getModules/:id", CourseController.getModules);
+router.delete("/deleteCourse/:id", roleMiddleware(["ADMIN"]), CourseController.deleteCourse);
+router.patch("/createModule/:id", roleMiddleware(["ADMIN"]), CourseController.createModule);
+router.patch("/addCourseToUser",  CourseController.addCourseToUser);
 
 export default router;

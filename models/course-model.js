@@ -11,7 +11,19 @@ const CourseSchema = new Schema(
     authorName: { type: String, required: true },
     authorProfession: { type: String, required: true },
     authors: [{ type: Schema.Types.ObjectId, ref: "Author" }],
-    lessons: [{ type: Schema.Types.ObjectId, ref: "Lesson" }],
+    modules: [
+      {
+        name: { type: String },
+        courseId: { type: String, default: "" },
+        lessons: [
+          {
+            name: { type: String },
+            videoUrl: { type: String },
+            description: { type: String },
+          },
+        ],
+      },
+    ],
   },
   {
     timestamps: true,

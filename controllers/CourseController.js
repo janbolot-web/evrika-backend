@@ -116,6 +116,7 @@ export const getLesson = async (req, res) => {
         }
       });
     });
+    res.json();
     // isLesson = isLesson.filter(function (number) {
     //   return number === lessonId;
     // });
@@ -136,8 +137,20 @@ export const getModules = async (req, res) => {
   }
 };
 
+export const getModule = async (req, res) => {
+  try {
+    const courseId = req.params.id;
+    const moduleId = req.query.moduleId;
+    const { modules } = await courseModel.findById(courseId);
+    const module = modules.filter((module) => String(module._id) === moduleId);
+    res.json(module[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Не удалось получить модуль" });
+  }
+};
+
 export const deleteCourse = async (req, res) => {
-  console.log(req.params.id);
   try {
     const id = req.params.id;
     await courseModel.findByIdAndDelete({ _id: id });
@@ -178,7 +191,7 @@ export const addCourseToUser = async (req, res) => {
     let module = courseData.modules.filter(
       (item) => String(item._id) === moduleId
     );
-    module[0].courseId = courseId
+    module[0].courseId = courseId;
     if (module.length > 0) {
       const candidate = userData.courses.filter(
         (item) => String(item._id) === moduleId
@@ -199,6 +212,23 @@ export const addCourseToUser = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Не удалось создать модуль" });
+  }
+};
+
+export const deleteModule = async (req, res) => {
+  try {
+    const courseId = req.params.id;
+    const moduleId = req.query.moduleId;
+    const course = await courseModel.findById({ _id: courseId });
+    course.modules = course.modules.filter(
+      (item) => String(item._id) !== moduleId
+    );
+
+    await course.save();
+    res.json({ message: "Модуль успешно удален" });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Не удалось удалить модуль" });
   }
 };
 

@@ -9,6 +9,7 @@ const UserSchema = new Schema(
       {
         name: { type: String },
         courseId: { type: String, default: "" },
+        price: { type: String },
         isAccess: { type: Boolean, default: false },
         lessons: [
           {

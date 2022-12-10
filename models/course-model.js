@@ -14,6 +14,7 @@ const CourseSchema = new Schema(
     modules: [
       {
         name: { type: String },
+        price: { type: String },
         courseId: { type: String, default: "" },
         lessons: [
           {

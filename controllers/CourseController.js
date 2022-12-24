@@ -111,12 +111,12 @@ export const getLesson = async (req, res) => {
     course.modules.forEach(function (item, i, arr) {
       item.lessons.forEach(function (item, i, arr) {
         // isLesson.push(String(item._id));
-        if (String(item._id) === lessonId) {
-          res.json(item);
+       if (String(item._id) === lessonId) {
+         return res.json(item);
         }
       });
     });
-    res.json();
+    // res.json();
     // isLesson = isLesson.filter(function (number) {
     //   return number === lessonId;
     // });

@@ -30,6 +30,7 @@ router.get("/getModules/:id", CourseController.getModules);
 router.get("/getModule/:id", CourseController.getModule);
 router.delete("/deleteCourse/:id", roleMiddleware(["ADMIN"]), CourseController.deleteCourse);
 router.delete("/deleteModule/:id", roleMiddleware(["ADMIN"]), CourseController.deleteModule);
+router.delete("/removeUserModule/:id",  CourseController.removeUserModule);
 router.patch("/createModule/:id", roleMiddleware(["ADMIN"]), CourseController.createModule);
 router.patch("/addCourseToUser",  CourseController.addCourseToUser);
 

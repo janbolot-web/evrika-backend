@@ -111,8 +111,8 @@ export const getLesson = async (req, res) => {
     course.modules.forEach(function (item, i, arr) {
       item.lessons.forEach(function (item, i, arr) {
         // isLesson.push(String(item._id));
-       if (String(item._id) === lessonId) {
-         return res.json(item);
+        if (String(item._id) === lessonId) {
+          return res.json(item);
         }
       });
     });
@@ -204,7 +204,7 @@ export const addCourseToUser = async (req, res) => {
       const a = await userModel.findByIdAndUpdate(userId, {
         courses: [...userData.courses, module[0]],
       });
-      return res.json(module);
+      return res.json({module,message:"Вы открыли доступ к модулю"});
     }
 
     // res.json(courseData);
@@ -212,6 +212,22 @@ export const addCourseToUser = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Не удалось создать модуль" });
+  }
+};
+
+export const removeUserModule = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.query;
+    const user = await userModel.findById(userId);
+    const deletedModule = user.courses.filter(
+      (course) => String(course._id) !== id
+    );
+    await userModel.findByIdAndUpdate(userId, { courses: deletedModule });
+    res.json({ message: "Вы успешно закрыли доступ!", deletedModule });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Не удалось закрыть доступ" });
   }
 };
 

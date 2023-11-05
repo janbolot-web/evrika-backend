@@ -21,6 +21,7 @@ const UserSchema = new mongoose.Schema(
       },
     ],
     roles: [{ type: String, ref: "Role" }],
+    avatarUrl: { type: String, required: true },
   },
   {
     timestamps: true,

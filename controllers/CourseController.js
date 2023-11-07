@@ -64,7 +64,8 @@ export const getAllCourses = async (req, res) => {
 export const getAllStories = async (req, res) => {
   try {
     const stories = await storyModel.find();
-    const storiesData = StoryDto(stories);
+    let storiesData = StoryDto(stories);
+    storiesData = storiesData.reverse();
     res.json(storiesData);
   } catch (error) {
     console.log(error);

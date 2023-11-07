@@ -11,7 +11,7 @@ export const register = async (req, res) => {
     if (!errors.isEmpty()) {
       return res.status(400).json({ message: errors.array()[0].msg });
     }
-    const { email, password, name } = req.body;
+    const { email, password, name, avatarUrl } = req.body;
     const candidate = await userModel.findOne({ email });
     if (candidate) {
       return res
@@ -27,6 +27,7 @@ export const register = async (req, res) => {
       email,
       password: hashPassword,
       name,
+      avatarUrl,
       roles: [userRole.value],
     });
 

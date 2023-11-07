@@ -15,6 +15,7 @@ app.use("/api", router);
 
 const start = async () => {
   try {
+    await mongoose.set("strictQuery", false);
     await mongoose.connect(
       "mongodb+srv://janbolot:janbolot@cluster0.zbojhsg.mongodb.net/?retryWrites=true&w=majority"
     );

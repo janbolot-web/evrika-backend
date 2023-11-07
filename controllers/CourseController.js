@@ -6,6 +6,8 @@ import lessonModel from "../models/lesson-model.js";
 import moduleModel from "../models/module-model.js";
 import userModel from "../models/user-model.js";
 import userCoursesModel from "../models/userCourses-model.js";
+import { StoryDto } from "../dtos/stories.dto.js";
+import storyModel from "../models/story-model.js";
 
 export const createCourse = async (req, res) => {
   try {
@@ -48,11 +50,25 @@ export const createCourse = async (req, res) => {
 export const getAllCourses = async (req, res) => {
   try {
     const courses = await courseModel.find();
+    console.log("courses" + courses);
     const coursesData = CourseDto(courses);
+    console.log("coursesData " + coursesData);
+
     res.json(coursesData);
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: "Не удалось получить все курсы" });
+  }
+};
+
+export const getAllStories = async (req, res) => {
+  try {
+    const stories = await storyModel.find();
+    const storiesData = StoryDto(stories);
+    res.json(storiesData);
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: "Не удалось получить все сторисы" });
   }
 };
 
@@ -204,7 +220,7 @@ export const addCourseToUser = async (req, res) => {
       const a = await userModel.findByIdAndUpdate(userId, {
         courses: [...userData.courses, module[0]],
       });
-      return res.json({module,message:"Вы открыли доступ к модулю"});
+      return res.json({ module, message: "Вы открыли доступ к модулю" });
     }
 
     // res.json(courseData);

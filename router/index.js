@@ -23,6 +23,7 @@ router.post(
   CourseController.createCourse
 );
 router.get("/getAllCourses", CourseController.getAllCourses);
+router.get("/getAllStories", CourseController.getAllStories);
 router.get("/getCourse/:id", CourseController.getCourse);
 router.get("/getLessons/:id", CourseController.getLessons);
 router.get("/getLesson/:id", CourseController.getLesson);

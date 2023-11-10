@@ -27,7 +27,7 @@ export const register = async (req, res) => {
       email,
       password: hashPassword,
       name,
-      avatarUrl,
+      avatarUrl: avatarUrl ? avatarUrl : "",
       roles: [userRole.value],
     });
 

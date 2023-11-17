@@ -116,7 +116,7 @@ export const getUsers = async (req, res) => {
   try {
     const users = await userModel.find();
 
-    res.json(users);
+    res.json(users.reverse());
   } catch (e) {
     console.log(e);
   }

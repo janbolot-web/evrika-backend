@@ -133,6 +133,23 @@ export const getUserById = async (req, res) => {
   }
 };
 
+export const searchUser = async (req, res) => {
+  try {
+    const user = await userModel
+      .find({
+        $or: [
+          { name: { $regex: req.params.key } },
+          { email: { $regex: req.params.key } },
+        ],
+      })
+      .populate("courses");
+
+    res.json(user);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;

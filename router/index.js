@@ -11,6 +11,7 @@ router.post("/auth/login", UserController.login);
 router.get("/auth/me", checkAuth, UserController.getMe);
 router.get("/getUsers", roleMiddleware(["ADMIN"]), UserController.getUsers);
 router.get("/getUserById/:id", UserController.getUserById);
+router.get("/users/search/:key", UserController.searchUser);
 router.delete(
   "/removeUser/:id",
   roleMiddleware(["ADMIN"]),

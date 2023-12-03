@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema(
           {
             name: { type: String },
             videoUrl: { type: String },
+            youtubeUrl: { type: String },
             description: { type: String },
           },
         ],

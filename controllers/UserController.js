@@ -122,6 +122,78 @@ export const getUsers = async (req, res) => {
   }
 };
 
+// export const getUsersTest = async (req, res) => {
+//   try {
+//     const users = await userModel.find();
+//     let userId = [];
+//     users.map((user) =>
+//       user.courses.map((course) => {
+//         if (course == null) return;
+//         course.lessons.map((lesson) => {
+//           if (lesson.name == "Киришүү сабагы") {
+//             userId.push(user.id);
+//           }
+//           return;
+//         });
+//       })
+//     );
+//     userId.map(async (user) => {
+//       const userData = await userModel.findById(user);
+//       let newData = [];
+//       userData.courses.map((course, index) => {
+//         let lessonsData = [];
+//         course.lessons.map((lesson) => {
+//           lessonsData.push({
+//             name: lesson.name,
+//             videoUrl: lesson.videoUrl,
+//             description: lesson.description,
+//             youtubeUrl:
+//               lesson.name === "Киришүү сабагы"
+//                 ? "https://youtu.be/qJ3cUsHClQA"
+//                 : lesson.name === "Алгачкы окуучуларды окутуу боюнча..."
+//                 ? "https://youtu.be/cayiHYUM32g"
+//                 : lesson.name == "\"Самореализация \""
+//                 ? "https://youtu.be/XQc_tTRcZaU"
+//                 : lesson.name ===
+//                   "Шар окуунун алгачкы сабагы жана алгачкы методикалары."
+//                 ? "https://youtu.be/WyEpVLqOvss"
+//                 : lesson.name === "Шар окуу китебинин мазмуну."
+//                 ? "https://youtu.be/jS67AbOxgOo"
+//                 : lesson.name ===
+//                   " Шар окуу китебиндеги көнүгүүлөрдүн инструкциясы..."
+//                 ? "https://youtu.be/kucjktQHeZY"
+//                 : lesson.name === "Шар окуу методикалары."
+//                 ? "https://youtu.be/erbAP7q4QSo"
+//                 : lesson.name ===
+//                   "Баланын окуудагы көйгөйлөрүн жоюуга арналган методикалар."
+//                 ? "https://youtu.be/uvi8dlnPRQI"
+//                 : lesson.name ===
+//                   " Баланын окуу ылдамдыгын арттыруучу методикалар."
+//                 ? "https://youtu.be/tzNhjOftLU8"
+//                 : lesson.name === "Баланын түшүнүгүн арттырууга иштөө." ??
+//                   "https://youtu.be/0Vft7qmPdzU",
+//           });
+//         });
+//         newData.push({
+//           name: course.name,
+//           courseId: course.courseId,
+//           price: course.price,
+//           isAccess: course.isAccess,
+//           lessons: lessonsData,
+//         });
+//       });
+//       const updatedData = await userModel.findByIdAndUpdate(user, {
+//         courses: newData,
+//       });
+//       res.json(updatedData);
+//     });
+
+//     res.json({ message: "ok" });
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
+
 export const getUserById = async (req, res) => {
   try {
     const { id } = req.params;

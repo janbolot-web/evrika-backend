@@ -221,9 +221,9 @@ export const addCourseToUser = async (req, res) => {
       const a = await userModel.findByIdAndUpdate(userId, {
         courses: [...userData.courses, module[0]],
       });
+      console.log("module !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! " + module);
       return res.json({ module, message: "Вы открыли доступ к модулю" });
     }
-
     // res.json(courseData);
     res.json({ message: "Что то пошло не так" });
   } catch (error) {

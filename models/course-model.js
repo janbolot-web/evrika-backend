@@ -21,6 +21,7 @@ const CourseSchema = new mongoose.Schema(
             name: { type: String },
             videoUrl: { type: String },
             description: { type: String },
+            youtubeUrl: { type: String },
           },
         ],
       },

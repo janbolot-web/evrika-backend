@@ -233,6 +233,21 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+// async function deleteUser(userId) {
+//   try {
+//     const result = await userModel.deleteOne({ _id: userId });
+
+//     if (result.deletedCount === 1) {
+//       console.log(`Пользователь с ID ${userId} успешно удален`);
+//     } else {
+//       console.log(`Пользователь с ID ${userId} не найден`);
+//     }
+//   } finally {
+//     await client.close();
+//   }
+// }
+
+
 // const roleModel = require("../models/role-model.js");
 // const { validationResult } = require("express-validator");
 // const userModel = require("../models/user-model.js");
